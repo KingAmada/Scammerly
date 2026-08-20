@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#081d17" />
+  <meta name="description" content="Scamenot Admin HQ — fraud intelligence review and evidence operations." />
+  <title>Scamenot Admin HQ</title>
+  <link rel="icon" type="image/png" href="icon.png" />
+  <link rel="shortcut icon" href="icon.png" />
+  <link rel="apple-touch-icon" href="icon.png" />
+  <style>
+    :root{
+      --bg:#071a15;
+      --bg-2:#0b241c;
+      --panel:rgba(255,255,255,.075);
+      --panel-2:rgba(255,255,255,.105);
+      --paper:#f7fbf9;
+      --white:#fff;
+      --ink:#eaf8f1;
+      --ink-dark:#10251d;
+      --muted:#91afa2;
+      --muted-dark:#6b8178;
+      --line:rgba(255,255,255,.11);
+      --green:#19d68b;
+      --green-2:#70efba;
+      --green-soft:#dff9ed;
+      --blue:#6796ff;
+      --amber:#f3b54a;
+      --red:#ff6076;
+      --purple:#aa8cff;
+      --shadow:0 28px 80px rgba(0,0,0,.28);
+      --r-xl:28px;
+      --r-lg:22px;
+      --r-md:17px;
+      --ease:cubic-bezier(.2,.8,.2,1);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;min-height:100vh;color:var(--ink);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:
+        radial-gradient(circle at 10% 10%,rgba(25,214,139,.13),transparent 28%),
+        radial-gradient(circle at 96% 10%,rgba(103,150,255,.10),transparent 24%),
+        linear-gradient(155deg,#061711,#0a2119 54%,#0a1c17);
+    }
+    body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.25;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(to bottom,black,transparent 90%)}
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    .hidden{display:none!important}
+    .muted{color:var(--muted)}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+
+    /* auth */
+    .auth-shell{min-height:100vh;display:grid;grid-template-columns:1.05fr .95fr;position:relative;z-index:2}
+    .auth-art{padding:54px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;position:relative}
+    .auth-art:after{content:"";position:absolute;width:560px;height:560px;border-radius:50%;right:-230px;bottom:-230px;background:radial-gradient(circle,rgba(25,214,139,.22),rgba(103,150,255,.08) 44%,transparent 67%);filter:blur(2px)}
+    .brand-lock{display:flex;gap:13px;align-items:center;position:relative;z-index:2}
+    .logo{width:49px;height:49px;border-radius:17px;display:grid;place-items:center;overflow:hidden;background:transparent;color:inherit;box-shadow:none;transform:none;flex:0 0 49px}.logo img{width:100%;height:100%;display:block;object-fit:contain}
+    .brand-lock strong{display:block;font-size:17px;letter-spacing:-.04em}
+    .brand-lock span{display:block;color:var(--muted);font-size:10px;margin-top:3px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+    .auth-copy{position:relative;z-index:2;max-width:720px;padding:80px 0 45px}
+    .auth-kicker{display:inline-flex;align-items:center;gap:8px;padding:8px 11px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid var(--line);font-size:10px;font-weight:950;color:#bde8d4;letter-spacing:.09em;text-transform:uppercase}
+    .auth-kicker i{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 0 7px rgba(25,214,139,.08)}
+    .auth-copy h1{font-size:clamp(54px,7vw,104px);line-height:.88;letter-spacing:-.085em;margin:23px 0 20px;max-width:780px}
+    .auth-copy h1 span{background:linear-gradient(90deg,#73edb9,#7ea8ff);background-clip:text;-webkit-background-clip:text;color:transparent}
+    .auth-copy p{color:#a7c1b6;line-height:1.65;font-size:14px;max-width:600px}
+    .auth-points{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:730px;position:relative;z-index:2}
+    .auth-point{border:1px solid var(--line);background:rgba(255,255,255,.05);border-radius:20px;padding:15px}
+    .auth-point b{display:block;font-size:11px}.auth-point span{display:block;color:var(--muted);font-size:9px;line-height:1.45;margin-top:4px}
+    .auth-panel-wrap{background:#eff6f2;display:grid;place-items:center;padding:30px;color:var(--ink-dark)}
+    .auth-panel{width:min(100%,500px);background:white;border-radius:34px;padding:27px;box-shadow:0 28px 80px rgba(21,60,45,.16);border:1px solid #fff}
+    .auth-panel h2{font-size:28px;letter-spacing:-.06em;margin:0 0 6px}.auth-panel>p{margin:0;color:var(--muted-dark);font-size:11px;line-height:1.5}
+    .auth-tabs{display:grid;grid-template-columns:1fr 1fr;background:#edf4f1;border:1px solid #dfeae5;border-radius:17px;padding:4px;margin:22px 0 12px}
+    .auth-tab{border:0;background:transparent;padding:11px;border-radius:13px;font-size:11px;font-weight:950;color:#758c82}.auth-tab.active{background:white;color:#087a50;box-shadow:0 7px 18px rgba(31,75,58,.09)}
+    .field{margin-top:11px;padding:12px 13px;border-radius:17px;background:#f8fbfa;border:1px solid #dfeae5;transition:.2s var(--ease)}
+    .field:focus-within{border-color:#6cdfac;box-shadow:0 0 0 4px rgba(25,214,139,.08)}
+    .field label{display:block;font-size:8px;letter-spacing:.09em;color:#7e948a;font-weight:1000;margin-bottom:6px}
+    .field input,.field select,.field textarea{width:100%;border:0;outline:0;background:transparent;color:#11271e;font-weight:800;font-size:13px}
+    .field textarea{min-height:92px;resize:vertical}
+    .btn{border:0;border-radius:16px;padding:12px 14px;font-weight:950;font-size:11px;transition:.22s var(--ease)}
+    .btn:hover{transform:translateY(-1px)}.btn:active{transform:scale(.985)}
+    .btn.primary{background:linear-gradient(135deg,#08b976,#4fe0a4);color:white;box-shadow:0 12px 25px rgba(8,185,118,.2)}
+    .btn.dark{background:#10382b;color:white}.btn.soft{background:#edf7f2;color:#126f4c}.btn.red{background:#fff0f2;color:#bd354b}.btn.amber{background:#fff7e7;color:#a66c10}.btn.blue{background:#eef3ff;color:#345db6}.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,.12);color:var(--ink)}
+    .auth-submit{width:100%;margin-top:15px;padding:14px}.auth-note{padding:11px 12px;border-radius:15px;background:#eff9f4;color:#427360;margin-top:12px;font-size:9.5px;line-height:1.5}
+
+    /* app frame */
+    .admin-app{min-height:100vh;display:grid;grid-template-columns:260px minmax(0,1fr);position:relative;z-index:2}
+    .sidebar{position:sticky;top:0;height:100vh;padding:18px 14px;border-right:1px solid var(--line);background:rgba(5,20,15,.73);backdrop-filter:blur(24px);display:flex;flex-direction:column}
+    .sidebar .brand-lock{padding:6px 7px 17px}.sidebar .logo{width:42px;height:42px;border-radius:15px;font-size:17px;flex-basis:42px}.sidebar .brand-lock strong{font-size:15px}
+    .side-label{padding:11px 11px 7px;color:#668579;font-size:8px;font-weight:1000;letter-spacing:.16em;text-transform:uppercase}
+    .side-nav{display:grid;gap:5px}
+    .nav-btn{width:100%;border:0;border-radius:15px;padding:11px 12px;background:transparent;color:#91afa2;text-align:left;font-size:10.5px;font-weight:850;display:flex;align-items:center;gap:10px;transition:.22s var(--ease)}
+    .nav-btn i{width:31px;height:31px;border-radius:11px;display:grid;place-items:center;background:rgba(255,255,255,.05);font-style:normal;font-size:13px}
+    .nav-btn b{margin-left:auto;font-size:8px;background:rgba(255,255,255,.07);padding:4px 6px;border-radius:999px;color:#9fbeaf}
+    .nav-btn:hover{background:rgba(255,255,255,.05);color:white}.nav-btn.active{background:linear-gradient(135deg,rgba(26,214,139,.16),rgba(103,150,255,.08));color:#dffff0;border:1px solid rgba(80,226,164,.14)}.nav-btn.active i{background:rgba(25,214,139,.13);color:#6ff0b8}
+    .sidebar-foot{margin-top:auto;border-top:1px solid var(--line);padding:14px 7px 3px}
+    .admin-mini{display:flex;align-items:center;gap:9px;padding:9px 8px;border-radius:15px;background:rgba(255,255,255,.04)}
+    .mini-avatar{width:35px;height:35px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,#17c780,#6ce9b5);color:#08241a;font-weight:1000;font-size:10px}
+    .admin-mini div{min-width:0}.admin-mini b{display:block;font-size:9.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.admin-mini span{display:block;color:#78978a;font-size:7.5px;margin-top:2px}
+    .logout-mini{border:0;background:transparent;color:#759388;margin-left:auto;font-size:13px}
+
+    .workspace{min-width:0;padding:18px 22px 50px}
+    .topbar{position:sticky;top:12px;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 12px 11px 16px;border-radius:21px;background:rgba(7,26,21,.76);backdrop-filter:blur(22px) saturate(140%);border:1px solid var(--line);box-shadow:0 16px 50px rgba(0,0,0,.14)}
+    .topbar-left small{display:block;color:#6e9282;font-size:8px;font-weight:1000;letter-spacing:.12em;text-transform:uppercase}.topbar-left h2{font-size:17px;letter-spacing:-.04em;margin:3px 0 0}
+    .top-actions{display:flex;align-items:center;gap:8px}.top-actions .btn{padding:10px 12px;background:rgba(255,255,255,.07);color:#c8e1d6;border:1px solid var(--line)}
+    .connection{display:flex;align-items:center;gap:7px;font-size:8px;color:#8fb5a4;font-weight:850;padding:8px 10px;border-radius:13px;background:rgba(25,214,139,.07);border:1px solid rgba(25,214,139,.1)}.connection i{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 5px rgba(25,214,139,.08)}
+
+    .view{display:none;animation:rise .35s var(--ease) both}.view.active{display:block}@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;padding:33px 3px 16px}.page-head h1{margin:0;font-size:34px;letter-spacing:-.065em;line-height:1}.page-head p{margin:7px 0 0;color:#789b8c;font-size:10px;line-height:1.5}.page-head .btn{padding:10px 13px}
+
+    .stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}.stat-card{padding:17px;border-radius:23px;background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.045));border:1px solid var(--line);box-shadow:0 16px 50px rgba(0,0,0,.08);min-height:126px;position:relative;overflow:hidden}.stat-card:after{content:"";position:absolute;width:100px;height:100px;border-radius:50%;right:-40px;bottom:-43px;background:radial-gradient(circle,rgba(25,214,139,.20),transparent 66%)}.stat-card small{color:#78998b;font-size:8px;font-weight:1000;letter-spacing:.08em;text-transform:uppercase}.stat-card strong{display:block;margin-top:15px;font-size:30px;letter-spacing:-.06em}.stat-card span{display:block;color:#739386;font-size:8px;margin-top:5px}.stat-card.alert strong{color:#ff9aa8}.stat-card.good strong{color:#68eeb5}.stat-card.money strong{font-size:24px;color:#ffd076}
+
+    .grid-2{display:grid;grid-template-columns:1.1fr .9fr;gap:12px;margin-top:12px}.panel{border:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.04));border-radius:25px;padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.08)}
+    .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.panel-head h3{font-size:13px;margin:0;letter-spacing:-.02em}.panel-head span,.panel-head button{color:#78998b;font-size:8px}.link{border:0;background:transparent;color:#64dfaa!important;font-weight:900!important}
+    .queue-mini{display:grid;gap:7px}.mini-row{display:grid;grid-template-columns:42px 1fr auto;gap:10px;align-items:center;padding:11px;border-radius:16px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.055)}.mini-icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:rgba(255,96,118,.1);color:#ff8293;font-size:14px}.mini-row b{font-size:10px}.mini-row p{margin:3px 0 0;color:#78998b;font-size:8px}.mini-row strong{font-size:10px}.mini-row small{display:block;color:#6e8e80;font-size:7px;margin-top:3px;text-align:right}
+    .audit-mini{display:grid;gap:8px}.audit-item{display:flex;gap:9px;padding:9px 2px;border-top:1px solid rgba(255,255,255,.06)}.audit-item:first-child{border-top:0}.audit-dot{width:9px;height:9px;border-radius:50%;background:#43dd9e;margin-top:3px;box-shadow:0 0 0 5px rgba(67,221,158,.07)}.audit-item b{font-size:9px}.audit-item span{display:block;color:#719184;font-size:7.5px;margin-top:3px;line-height:1.4}
+
+    .filters{display:grid;grid-template-columns:1.4fr repeat(3,minmax(130px,.55fr)) auto;gap:8px;margin-bottom:11px}.filter{border:1px solid var(--line);background:rgba(255,255,255,.055);color:#dceee6;border-radius:14px;padding:10px 11px;outline:0;font-size:9.5px}.filter::placeholder{color:#668679}.filter option{color:#13281f}.filters .btn{padding:10px 13px}
+    .data-panel{border:1px solid var(--line);border-radius:24px;overflow:hidden;background:rgba(255,255,255,.035)}
+    .table{width:100%;border-collapse:collapse}.table th{text-align:left;color:#6f9183;font-size:7.5px;letter-spacing:.09em;text-transform:uppercase;padding:12px 13px;border-bottom:1px solid var(--line);font-weight:1000}.table td{padding:12px 13px;border-bottom:1px solid rgba(255,255,255,.055);font-size:9px;vertical-align:middle}.table tr:last-child td{border-bottom:0}.table tbody tr{transition:.18s}.table tbody tr:hover{background:rgba(255,255,255,.035)}
+    .id-main{font-weight:950;font-size:9.5px}.sub{color:#719185;font-size:7.5px;margin-top:3px}.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:5px 7px;font-size:7.5px;font-weight:950;white-space:nowrap}.pill:before{content:"";width:5px;height:5px;border-radius:50%;background:currentColor}.pill.pending{background:rgba(243,181,74,.1);color:#f3c06c}.pill.verified{background:rgba(25,214,139,.11);color:#66e9b3}.pill.rejected{background:rgba(255,96,118,.11);color:#ff8797}.pill.disputed{background:rgba(170,140,255,.11);color:#bea7ff}.pill.resolved{background:rgba(103,150,255,.11);color:#8ab0ff}.pill.evidence{background:rgba(255,255,255,.06);color:#aac7ba}.pill.score-low{background:rgba(25,214,139,.1);color:#62e8b0}.pill.score-med{background:rgba(243,181,74,.1);color:#f6c56f}.pill.score-high{background:rgba(255,96,118,.1);color:#ff8797}.row-action{border:0;border-radius:10px;padding:7px 9px;background:rgba(255,255,255,.065);color:#cee4da;font-size:8px;font-weight:900}.empty{padding:45px 20px;text-align:center;color:#67897a}.empty b{display:block;color:#b8d4c7;font-size:12px}.empty span{display:block;font-size:8.5px;margin-top:6px}
+
+    .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.entity-card{padding:15px;border-radius:21px;background:rgba(255,255,255,.05);border:1px solid var(--line)}.entity-top{display:flex;justify-content:space-between;gap:10px}.entity-card h3{font-size:11px;margin:0}.entity-card p{font-size:8px;color:#78978a;line-height:1.45;margin:5px 0 0}.entity-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px}.entity-metrics div{padding:9px;border-radius:13px;background:rgba(255,255,255,.04)}.entity-metrics b{display:block;font-size:13px}.entity-metrics span{display:block;color:#6e8d80;font-size:6.8px;margin-top:3px}.entity-card .btn{margin-top:10px;width:100%;background:rgba(255,255,255,.06);color:#cfe6db;border:1px solid rgba(255,255,255,.07)}
+
+    /* drawer */
+    .overlay{position:fixed;inset:0;z-index:110;background:rgba(0,10,7,.55);backdrop-filter:blur(9px);opacity:0;pointer-events:none;transition:.25s}.overlay.show{opacity:1;pointer-events:auto}
+    .drawer{position:absolute;right:0;top:0;height:100%;width:min(740px,94vw);background:#f6faf8;color:#12271f;box-shadow:-30px 0 100px rgba(0,0,0,.32);transform:translateX(100%);transition:.38s var(--ease);overflow:auto;padding:19px 19px 55px}.overlay.show .drawer{transform:none}.drawer-head{position:sticky;top:0;z-index:4;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0 14px;background:linear-gradient(#f6faf8 78%,transparent)}.drawer-head small{font-size:8px;color:#789087;font-weight:1000;letter-spacing:.11em}.drawer-head h2{margin:4px 0 0;font-size:23px;letter-spacing:-.05em}.close{width:40px;height:40px;border-radius:14px;border:1px solid #dce8e2;background:white;color:#173128;font-size:18px}.drawer-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:10px}.light-card{background:white;border:1px solid #e1ebe6;border-radius:21px;padding:15px;box-shadow:0 10px 30px rgba(33,70,55,.06)}.light-card h3{font-size:11px;margin:0 0 10px}.detail-row{display:flex;justify-content:space-between;gap:20px;padding:8px 0;border-top:1px solid #edf2ef;font-size:9px}.detail-row:first-of-type{border-top:0}.detail-row span{color:#7b8f87}.detail-row b{text-align:right}.story{font-size:10px;line-height:1.65;color:#334f44;white-space:pre-wrap}.evidence-preview{min-height:155px;border-radius:17px;background:#edf4f1;border:1px dashed #c9d9d1;display:grid;place-items:center;overflow:hidden;color:#728a80;text-align:center;padding:12px}.evidence-preview img{max-width:100%;max-height:380px;border-radius:12px}.evidence-preview iframe{width:100%;height:380px;border:0;border-radius:12px;background:white}.evidence-preview b{display:block;color:#294c3f;font-size:10px}.evidence-preview span{font-size:8px;margin-top:4px;display:block}.light-card .field{background:#f7faf9}.review-actions{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px}.review-actions .btn{padding:9px 6px;font-size:8px}.review-footer{display:flex;gap:8px;position:sticky;bottom:8px;padding:12px 0 0;background:linear-gradient(transparent,#f6faf8 20%)}.review-footer .btn{flex:1;padding:13px}.risk-hero{display:grid;grid-template-columns:92px 1fr;gap:13px;align-items:center}.risk-ring{width:88px;height:88px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#ef5d73 calc(var(--score)*1%),#e9efec 0);position:relative}.risk-ring:after{content:"";position:absolute;inset:8px;border-radius:50%;background:white}.risk-ring b{position:relative;z-index:1;font-size:24px}.risk-hero h3{margin:0;font-size:15px}.risk-hero p{margin:5px 0 0;color:#72877e;font-size:8.5px;line-height:1.45}
+
+    /* invite */
+    .invite-box{margin-top:12px;padding:13px;border-radius:17px;background:#ecf9f3;border:1px solid #d1eee0;color:#174c37}.invite-box code{display:block;font-size:10px;word-break:break-all;font-weight:900;margin:6px 0}.invite-box small{font-size:8px;color:#56806f}
+    .copy-row{display:flex;gap:7px}.copy-row .btn{flex:1}
+
+    .toast{position:fixed;left:50%;top:19px;z-index:250;transform:translate(-50%,-18px);opacity:0;pointer-events:none;max-width:460px;width:calc(100% - 30px);padding:12px 14px;border-radius:15px;background:#f7fffb;color:#113328;box-shadow:0 20px 60px rgba(0,0,0,.22);font-size:9.5px;font-weight:900;transition:.28s var(--ease);border:1px solid #dcf2e7}.toast.show{opacity:1;transform:translate(-50%,0)}.toast.error{background:#fff3f5;color:#a92f43;border-color:#ffd8df}
+    .loader{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.25);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+
+    .mobile-nav{display:none}
+    @media(max-width:1150px){.stats-grid{grid-template-columns:repeat(2,1fr)}.cards{grid-template-columns:repeat(2,1fr)}.grid-2{grid-template-columns:1fr}.filters{grid-template-columns:1fr 1fr 1fr}.filters input:first-child{grid-column:span 2}}
+    @media(max-width:820px){
+      .auth-shell{grid-template-columns:1fr}.auth-art{display:none}.auth-panel-wrap{min-height:100vh;padding:18px}.auth-panel{padding:22px;border-radius:27px}
+      .admin-app{display:block}.sidebar{display:none}.workspace{padding:12px 12px 90px}.topbar{top:8px}.connection{display:none}.page-head{padding:27px 2px 13px}.page-head h1{font-size:29px}.stats-grid{gap:8px}.stat-card{min-height:111px;padding:14px}.stat-card strong{font-size:25px}.stat-card.money strong{font-size:20px}.cards{grid-template-columns:1fr}.data-panel{overflow:auto}.table{min-width:720px}.filters{grid-template-columns:1fr 1fr}.filters input:first-child{grid-column:1/-1}.filters .btn{grid-column:1/-1}.drawer{width:100%;padding:13px 13px 45px}.drawer-grid{grid-template-columns:1fr}.review-actions{grid-template-columns:1fr 1fr 1fr}.mobile-nav{position:fixed;z-index:75;left:10px;right:10px;bottom:10px;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:6px;border-radius:22px;background:rgba(9,30,23,.92);backdrop-filter:blur(22px);border:1px solid var(--line);box-shadow:0 20px 60px rgba(0,0,0,.28)}.mobile-nav button{border:0;background:transparent;color:#77988a;border-radius:15px;padding:7px 2px;font-size:7px;font-weight:900}.mobile-nav button span{display:block;font-size:15px;margin-bottom:2px}.mobile-nav button.active{background:rgba(25,214,139,.12);color:#73eeb8}}
+    @media(max-width:480px){.stats-grid{grid-template-columns:1fr 1fr}.stat-card{min-height:104px}.page-head{align-items:flex-start;flex-direction:column}.top-actions .btn span{display:none}.auth-points{grid-template-columns:1fr}.review-actions{grid-template-columns:1fr 1fr}.risk-hero{grid-template-columns:76px 1fr}.risk-ring{width:72px;height:72px}.filters{grid-template-columns:1fr}.filters input:first-child,.filters .btn{grid-column:auto}}
+  </style>
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+
+  <section id="authShell" class="auth-shell">
+    <div class="auth-art">
+      <div class="brand-lock"><div class="logo"><img src="icon.png" alt="Scamenot" /></div><div><strong>SCAMENOT</strong><span>Admin HQ</span></div></div>
+      <div class="auth-copy">
+        <div class="auth-kicker"><i></i> Fraud intelligence operations</div>
+        <h1>Evidence in. <span>Decisions out.</span></h1>
+        <p>Review incident reports, inspect private evidence, verify or reject claims, record disputes and resolutions, and keep every administrative decision auditable.</p>
+      </div>
+      <div class="auth-points">
+        <div class="auth-point"><b>Private evidence</b><span>Receipts and screenshots are served through expiring signed links.</span></div>
+        <div class="auth-point"><b>Controlled scoring</b><span>Risk changes follow report decisions—not arbitrary score editing.</span></div>
+        <div class="auth-point"><b>Audit everything</b><span>Every review decision is written to an administrative history.</span></div>
+      </div>
+    </div>
+
+    <div class="auth-panel-wrap">
+      <div class="auth-panel">
+        <div class="brand-lock" style="margin-bottom:18px"><div class="logo"><img src="icon.png" alt="Scamenot" /></div><div><strong>Scamenot Admin HQ</strong><span style="color:#799087">Authorized access only</span></div></div>
+        <h2 id="authTitle">Welcome back.</h2>
+        <p id="authSub">Sign in with your Scamenot administrator account.</p>
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-auth-mode="login">Sign in</button>
+          <button class="auth-tab" data-auth-mode="setup">First setup</button>
+        </div>
+        <div id="setupFields" class="hidden">
+          <div class="field"><label>ONE-TIME ADMIN INVITE</label><input id="inviteCode" autocomplete="off" placeholder="SCN-…" /></div>
+          <div class="field"><label>YOUR NAME</label><input id="setupName" autocomplete="name" placeholder="Administrator name" /></div>
+        </div>
+        <div class="field"><label>EMAIL ADDRESS</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@company.com" /></div>
+        <div class="field"><label>PASSWORD</label><input id="authPassword" type="password" autocomplete="current-password" placeholder="Minimum 10 characters" /></div>
+        <button id="authSubmit" class="btn primary auth-submit">Sign in to Admin HQ</button>
+        <div id="authNote" class="auth-note">Administrator access is separate from public Scamenot reporter profiles.</div>
+      </div>
+    </div>
+  </section>
+
+  <div id="adminApp" class="admin-app hidden">
+    <aside class="sidebar">
+      <div class="brand-lock"><div class="logo"><img src="icon.png" alt="Scamenot" /></div><div><strong>SCAMENOT</strong><span>Admin HQ</span></div></div>
+      <div class="side-label">Operations</div>
+      <nav class="side-nav">
+        <button class="nav-btn active" data-view="overview"><i>⌂</i>Overview</button>
+        <button class="nav-btn" data-view="reports"><i>!</i>Report Queue <b id="sidePending">0</b></button>
+        <button class="nav-btn" data-view="risks"><i>◉</i>Risk Profiles</button>
+        <button class="nav-btn" data-view="reporters"><i>◎</i>Reporters</button>
+        <button class="nav-btn" data-view="searches"><i>⌕</i>Search Intelligence</button>
+      </nav>
+      <div class="side-label">Governance</div>
+      <nav class="side-nav">
+        <button class="nav-btn" data-view="audit"><i>≡</i>Audit Trail</button>
+        <button class="nav-btn" data-view="team" id="teamNav"><i>♙</i>Admin Team</button>
+      </nav>
+      <div class="sidebar-foot">
+        <div class="admin-mini"><div class="mini-avatar" id="miniAvatar">AD</div><div><b id="miniName">Administrator</b><span id="miniRole">OWNER</span></div><button class="logout-mini" id="logoutBtn" title="Sign out">↗</button></div>
+      </div>
+    </aside>
+
+    <main class="workspace">
+      <header class="topbar">
+        <div class="topbar-left"><small>Scamenot intelligence operations</small><h2 id="topTitle">Overview</h2></div>
+        <div class="top-actions"><div class="connection"><i></i> Supabase live</div><button class="btn" id="refreshBtn">↻ <span>Refresh</span></button></div>
+      </header>
+
+      <section class="view active" data-page="overview">
+        <div class="page-head"><div><h1>Control room.</h1><p>Live operational view of reports, verification, risk and search activity.</p></div><button class="btn ghost" data-view-jump="reports">Open report queue →</button></div>
+        <div class="stats-grid">
+          <article class="stat-card"><small>All reports</small><strong id="sReports">0</strong><span>Total submitted incidents</span></article>
+          <article class="stat-card alert"><small>Needs review</small><strong id="sPending">0</strong><span>Under verification</span></article>
+          <article class="stat-card good"><small>Verified</small><strong id="sVerified">0</strong><span>Confirmed incidents</span></article>
+          <article class="stat-card money"><small>Claimed value</small><strong id="sValue">₦0</strong><span>Excludes rejected reports</span></article>
+          <article class="stat-card"><small>Evidence files</small><strong id="sEvidence">0</strong><span>Private receipts / screenshots</span></article>
+          <article class="stat-card"><small>Searches</small><strong id="sSearches">0</strong><span><span id="sSearchesToday" style="display:inline;color:#68eeb5">0</span> today</span></article>
+          <article class="stat-card"><small>Reporters</small><strong id="sReporters">0</strong><span>Reporter profiles</span></article>
+          <article class="stat-card alert"><small>High risk</small><strong id="sHighRisk">0</strong><span>Profiles scoring 60+</span></article>
+        </div>
+        <div class="grid-2">
+          <section class="panel"><div class="panel-head"><h3>Newest reports</h3><button class="link" data-view-jump="reports">View queue</button></div><div id="overviewReports" class="queue-mini"></div></section>
+          <section class="panel"><div class="panel-head"><h3>Recent admin activity</h3><button class="link" data-view-jump="audit">Audit trail</button></div><div id="overviewAudit" class="audit-mini"></div></section>
+        </div>
+      </section>
+
+      <section class="view" data-page="reports">
+        <div class="page-head"><div><h1>Report queue.</h1><p>Review evidence, investigate claims and decide how each incident should affect risk.</p></div></div>
+        <div class="filters">
+          <input id="reportQ" class="filter" placeholder="Search account, bank or report text…" />
+          <select id="reportStatus" class="filter"><option value="all">All statuses</option><option value="under_verification">Under verification</option><option value="verified">Verified</option><option value="disputed">Disputed</option><option value="resolved">Resolved</option><option value="rejected">Rejected</option></select>
+          <select id="reportType" class="filter"><option value="all">All identity types</option><option value="account">Bank account</option><option value="phone">Phone number</option></select>
+          <input id="reportBank" class="filter" placeholder="Bank filter" />
+          <button id="reportFilterBtn" class="btn soft">Apply</button>
+        </div>
+        <div class="data-panel"><table class="table"><thead><tr><th>Identity</th><th>Reporter</th><th>Claimed loss</th><th>Evidence</th><th>Status</th><th>Submitted</th><th></th></tr></thead><tbody id="reportsBody"></tbody></table><div id="reportsEmpty" class="empty hidden"><b>No reports found.</b><span>Try another filter or wait for new submissions.</span></div></div>
+      </section>
+
+      <section class="view" data-page="risks">
+        <div class="page-head"><div><h1>Risk profiles.</h1><p>Aggregated identity intelligence generated from non-rejected incident reports.</p></div></div>
+        <div class="filters" style="grid-template-columns:1fr 180px auto"><input id="riskQ" class="filter" placeholder="Search account / phone / bank…" /><select id="riskMin" class="filter"><option value="0">All scores</option><option value="30">30+ elevated</option><option value="60">60+ high</option><option value="80">80+ very high</option></select><button id="riskFilterBtn" class="btn soft">Apply</button></div>
+        <div id="riskCards" class="cards"></div>
+      </section>
+
+      <section class="view" data-page="reporters">
+        <div class="page-head"><div><h1>Reporters.</h1><p>Reporter profiles, reporting history and evidence contribution.</p></div></div>
+        <div class="filters" style="grid-template-columns:1fr auto"><input id="reporterQ" class="filter" placeholder="Search name or phone…" /><button id="reporterFilterBtn" class="btn soft">Search</button></div>
+        <div id="reporterCards" class="cards"></div>
+      </section>
+
+      <section class="view" data-page="searches">
+        <div class="page-head"><div><h1>Search intelligence.</h1><p>Recent account and phone lookups performed on the public Scamenot app.</p></div></div>
+        <div class="data-panel"><table class="table"><thead><tr><th>Identity</th><th>Type</th><th>Risk at search</th><th>Reporter link</th><th>Time</th></tr></thead><tbody id="searchesBody"></tbody></table></div>
+      </section>
+
+      <section class="view" data-page="audit">
+        <div class="page-head"><div><h1>Audit trail.</h1><p>Administrative decisions and account-control actions retained for accountability.</p></div></div>
+        <div class="data-panel"><table class="table"><thead><tr><th>Action</th><th>Entity</th><th>Admin</th><th>Note</th><th>Time</th></tr></thead><tbody id="auditBody"></tbody></table></div>
+      </section>
+
+      <section class="view" data-page="team">
+        <div class="page-head"><div><h1>Admin team.</h1><p>Owners can invite reviewers or other owners and deactivate administrative access.</p></div><button id="createInviteBtn" class="btn ghost">+ Create invite</button></div>
+        <div id="teamCards" class="cards"></div>
+        <section class="panel" style="margin-top:12px"><div class="panel-head"><h3>Create a one-time administrator invite</h3><span>Expires after 7 days</span></div><div style="display:grid;grid-template-columns:1fr auto;gap:8px"><select id="inviteRole" class="filter"><option value="reviewer">Reviewer</option><option value="owner">Owner</option></select><button id="generateInviteBtn" class="btn soft">Generate code</button></div><div id="generatedInvite" class="invite-box hidden"></div></section>
+      </section>
+    </main>
+
+    <nav class="mobile-nav">
+      <button class="active" data-view="overview"><span>⌂</span>Home</button><button data-view="reports"><span>!</span>Reports</button><button data-view="risks"><span>◉</span>Risk</button><button data-view="reporters"><span>◎</span>People</button><button data-view="audit"><span>≡</span>Audit</button>
+    </nav>
+  </div>
+
+  <div id="reportOverlay" class="overlay">
+    <aside class="drawer">
+      <div class="drawer-head"><div><small>REPORT INVESTIGATION</small><h2 id="dTitle">Review incident</h2></div><button class="close" id="closeDrawer">×</button></div>
+      <div class="drawer-grid">
+        <div>
+          <section class="light-card"><h3>Incident</h3><div id="incidentDetails"></div><h3 style="margin-top:14px">Reporter statement</h3><div id="incidentStory" class="story"></div></section>
+          <section class="light-card" style="margin-top:10px"><div style="display:flex;align-items:center;justify-content:space-between;gap:10px"><h3>Private evidence</h3><button id="loadEvidenceBtn" class="btn soft" style="padding:8px 10px">Open evidence</button></div><div id="evidencePreview" class="evidence-preview"><div><b>No evidence loaded.</b><span>Signed evidence links expire after 10 minutes.</span></div></div></section>
+          <section class="light-card" style="margin-top:10px"><h3>Review notes</h3><div class="field"><label>INTERNAL ADMIN NOTE</label><textarea id="adminNote" placeholder="Why are you making this decision?"></textarea></div><div class="field"><label>RESOLUTION / REFUND NOTE</label><textarea id="resolutionNote" placeholder="Optional: refund, settlement or resolution details"></textarea></div><div class="field"><label>RESOLUTION AMOUNT (₦)</label><input id="resolutionAmount" inputmode="numeric" placeholder="Optional" /></div></section>
+        </div>
+        <div>
+          <section class="light-card"><h3>Current risk</h3><div id="riskHero"></div><div id="riskMetrics"></div></section>
+          <section class="light-card" style="margin-top:10px"><h3>Reporter</h3><div id="reporterDetails"></div></section>
+          <section class="light-card" style="margin-top:10px"><h3>Evidence decision</h3><div class="field"><label>EVIDENCE STATUS</label><select id="evidenceStatus"><option value="unreviewed">Unreviewed</option><option value="verified">Verified evidence</option><option value="rejected">Rejected evidence</option></select></div></section>
+          <section class="light-card" style="margin-top:10px"><h3>Report decision</h3><div id="reviewActions" class="review-actions"><button class="btn amber" data-set-status="under_verification">Review</button><button class="btn primary" data-set-status="verified">Verify</button><button class="btn red" data-set-status="rejected">Reject</button><button class="btn blue" data-set-status="disputed">Dispute</button><button class="btn soft" data-set-status="resolved">Resolve</button></div><div class="field"><label>SELECTED STATUS</label><select id="reviewStatus"><option value="under_verification">Under verification</option><option value="verified">Verified</option><option value="rejected">Rejected</option><option value="disputed">Disputed</option><option value="resolved">Resolved / refunded</option></select></div></section>
+          <section class="light-card" style="margin-top:10px"><h3>Review history</h3><div id="drawerAudit" class="audit-mini"></div></section>
+        </div>
+      </div>
+      <div class="review-footer"><button id="cancelReview" class="btn" style="background:white;border:1px solid #dfe9e4;color:#405c51">Cancel</button><button id="saveReview" class="btn dark">Save review & recalculate risk</button></div>
+    </aside>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.111.0/+esm';
+
+    const SUPABASE_URL = 'https://rwvngisohnflfofikspy.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_V3B4qEnO8hPcHofizy8zoA_TDANaLlx';
+    const ADMIN_API = SUPABASE_URL + '/functions/v1/scamenot-admin-api';
+    const supabase = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, { auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true} });
+
+    const $ = (s,r=document)=>r.querySelector(s); const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+    const esc = v => String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+    const fmtDate = v => v ? new Intl.DateTimeFormat('en-NG',{dateStyle:'medium',timeStyle:'short'}).format(new Date(v)) : '—';
+    const fmtMoney = v => '₦' + Number(v||0).toLocaleString('en-NG',{maximumFractionDigits:0});
+    const initials = n => String(n||'AD').split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase();
+    const statusLabel = s => ({under_verification:'Under verification',verified:'Verified',rejected:'Rejected',disputed:'Disputed',resolved:'Resolved'}[s]||s||'—');
+    const statusClass = s => ({under_verification:'pending',verified:'verified',rejected:'rejected',disputed:'disputed',resolved:'resolved'}[s]||'evidence');
+    const riskClass = s => Number(s)>=60?'score-high':Number(s)>=30?'score-med':'score-low';
+    let authMode='login', currentAdmin=null, currentView='overview', currentReport=null, cachedReports=[];
+
+    function toast(message,error=false){ const t=$('#toast'); t.textContent=message; t.className='toast show'+(error?' error':''); clearTimeout(toast.timer); toast.timer=setTimeout(()=>t.className='toast',3200); }
+    function setBusy(btn,busy,label){ if(!btn)return; if(busy){btn.dataset.old=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="loader"></span>';} else {btn.disabled=false;btn.innerHTML=label||btn.dataset.old||'Done';} }
+
+    async function api(action,payload={},needsAuth=true){
+      const headers={'apikey':SUPABASE_PUBLISHABLE_KEY,'content-type':'application/json'};
+      if(needsAuth){ const {data:{session}}=await supabase.auth.getSession(); if(!session) throw new Error('Your session has expired. Sign in again.'); headers.Authorization='Bearer '+session.access_token; }
+      const res=await fetch(ADMIN_API,{method:'POST',headers,body:JSON.stringify({action,...payload})});
+      const data=await res.json().catch(()=>({error:'Invalid server response'})); if(!res.ok) throw new Error(data.error||'Request failed'); return data;
+    }
+
+    function setAuthMode(mode){ authMode=mode; $$('[data-auth-mode]').forEach(b=>b.classList.toggle('active',b.dataset.authMode===mode)); $('#setupFields').classList.toggle('hidden',mode!=='setup'); $('#authTitle').textContent=mode==='setup'?'Create the first admin.':'Welcome back.'; $('#authSub').textContent=mode==='setup'?'Use your one-time owner invite to create a secure administrator account.':'Sign in with your Scamenot administrator account.'; $('#authSubmit').textContent=mode==='setup'?'Create administrator':'Sign in to Admin HQ'; $('#authNote').textContent=mode==='setup'?'The invite is single-use and is never stored in this HTML file.':'Administrator access is separate from public Scamenot reporter profiles.'; $('#authPassword').autocomplete=mode==='setup'?'new-password':'current-password'; }
+    $$('[data-auth-mode]').forEach(b=>b.addEventListener('click',()=>setAuthMode(b.dataset.authMode)));
+
+    $('#authSubmit').addEventListener('click',async()=>{
+      const btn=$('#authSubmit'),email=$('#authEmail').value.trim(),password=$('#authPassword').value;
+      if(!email||password.length<10) return toast('Enter a valid email and a password of at least 10 characters.',true);
+      setBusy(btn,true);
+      try{
+        if(authMode==='setup'){
+          const invite=$('#inviteCode').value.trim(),full_name=$('#setupName').value.trim(); if(!invite) throw new Error('Enter the one-time admin invite code.');
+          const r=await api('bootstrap_admin',{invite,email,password,full_name},false); toast(r.message||'Administrator created.'); setAuthMode('login');
+        }else{
+          const {error}=await supabase.auth.signInWithPassword({email,password}); if(error) throw error; await enterApp();
+        }
+      }catch(e){toast(e.message||String(e),true)}finally{setBusy(btn,false,authMode==='setup'?'Create administrator':'Sign in to Admin HQ')}
+    });
+    $('#authPassword').addEventListener('keydown',e=>{if(e.key==='Enter')$('#authSubmit').click()});
+
+    async function enterApp(){
+      try{ const me=await api('me'); currentAdmin=me.admin; $('#authShell').classList.add('hidden'); $('#adminApp').classList.remove('hidden'); const name=currentAdmin.full_name||currentAdmin.email||'Administrator'; $('#miniName').textContent=name; $('#miniAvatar').textContent=initials(name); $('#miniRole').textContent=String(currentAdmin.role||'admin').toUpperCase(); $('#teamNav').classList.toggle('hidden',currentAdmin.role!=='owner'); await loadView('overview',true); }
+      catch(e){ await supabase.auth.signOut(); $('#authShell').classList.remove('hidden'); $('#adminApp').classList.add('hidden'); toast(e.message||'Admin access denied.',true); }
+    }
+    $('#logoutBtn').addEventListener('click',async()=>{await supabase.auth.signOut();location.reload()});
+
+    async function switchView(view,force=false){
+      if(view==='team'&&currentAdmin?.role!=='owner') return toast('Owner access required.',true);
+      currentView=view; $$('.view').forEach(v=>v.classList.toggle('active',v.dataset.page===view)); $$('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view)); $('#topTitle').textContent=({overview:'Overview',reports:'Report Queue',risks:'Risk Profiles',reporters:'Reporters',searches:'Search Intelligence',audit:'Audit Trail',team:'Admin Team'}[view]||view); await loadView(view,force);
+    }
+    $$('[data-view]').forEach(b=>b.addEventListener('click',()=>switchView(b.dataset.view)));
+    $$('[data-view-jump]').forEach(b=>b.addEventListener('click',()=>switchView(b.dataset.viewJump)));
+    $('#refreshBtn').addEventListener('click',()=>loadView(currentView,true));
+
+    async function loadView(view,force=false){
+      try{
+        if(view==='overview') return loadOverview();
+        if(view==='reports') return loadReports();
+        if(view==='risks') return loadRisks();
+        if(view==='reporters') return loadReporters();
+        if(view==='searches') return loadSearches();
+        if(view==='audit') return loadAudit();
+        if(view==='team') return loadTeam();
+      }catch(e){toast(e.message||String(e),true)}
+    }
+
+    async function loadOverview(){
+      const [stats,reports]=await Promise.all([api('stats'),api('reports',{status:'all',limit:5})]);
+      const s=stats.stats; $('#sReports').textContent=s.reports; $('#sPending').textContent=s.pending; $('#sVerified').textContent=s.verified; $('#sValue').textContent=fmtMoney(s.claimed_value); $('#sEvidence').textContent=s.evidence; $('#sSearches').textContent=s.searches; $('#sSearchesToday').textContent=s.searches_today; $('#sReporters').textContent=s.reporters; $('#sHighRisk').textContent=s.high_risk; $('#sidePending').textContent=s.pending;
+      $('#overviewReports').innerHTML=(reports.reports||[]).length?(reports.reports||[]).map(r=>`<button class="mini-row" data-open-report="${esc(r.id)}" style="width:100%;border:0;color:inherit;text-align:left"><div class="mini-icon">!</div><div><b>${esc(r.bank||'Phone')} · ${esc(r.identifier_masked)}</b><p>${esc(r.reporter?`${r.reporter.first_name} ${r.reporter.last_name}`:'Unknown reporter')} · ${r.has_evidence?'Evidence attached':'No evidence'}</p></div><div><strong>${fmtMoney(r.amount_lost)}</strong><small>${statusLabel(r.status)}</small></div></button>`).join(''):`<div class="empty"><b>No incident reports yet.</b><span>New submissions will appear here.</span></div>`;
+      $('#overviewAudit').innerHTML=(stats.recent_audit||[]).length?(stats.recent_audit||[]).map(a=>`<div class="audit-item"><div class="audit-dot"></div><div><b>${esc(a.action.replaceAll('_',' '))}</b><span>${esc(a.note||`${a.entity_type} ${a.entity_id||''}`)} · ${fmtDate(a.created_at)}</span></div></div>`).join(''):`<div class="empty"><b>No admin actions yet.</b><span>Review decisions will be recorded here.</span></div>`;
+      bindReportOpeners();
+    }
+
+    async function loadReports(){
+      const data=await api('reports',{q:$('#reportQ').value.trim(),status:$('#reportStatus').value,identity_type:$('#reportType').value,bank:$('#reportBank').value.trim(),limit:100}); cachedReports=data.reports||[];
+      $('#reportsBody').innerHTML=cachedReports.map(r=>`<tr><td><div class="id-main">${esc(r.bank||'Phone')} · ${esc(r.identifier_masked)}</div><div class="sub">${esc(r.identity_type)}</div></td><td><div class="id-main">${esc(r.reporter?`${r.reporter.first_name} ${r.reporter.last_name}`:'—')}</div><div class="sub">${esc(r.reporter?.phone||'')}</div></td><td><b>${fmtMoney(r.amount_lost)}</b></td><td>${r.has_evidence?`<span class="pill evidence">${esc(r.evidence_status||'unreviewed')}</span>`:'<span class="sub">None</span>'}</td><td><span class="pill ${statusClass(r.status)}">${statusLabel(r.status)}</span></td><td><div>${fmtDate(r.created_at)}</div></td><td><button class="row-action" data-open-report="${esc(r.id)}">Review →</button></td></tr>`).join('');
+      $('#reportsEmpty').classList.toggle('hidden',cachedReports.length>0); bindReportOpeners();
+    }
+    $('#reportFilterBtn').addEventListener('click',loadReports); $('#reportQ').addEventListener('keydown',e=>{if(e.key==='Enter')loadReports()});
+
+    async function loadRisks(){
+      const data=await api('risks',{q:$('#riskQ').value.trim(),min_score:Number($('#riskMin').value)}); const rows=data.risks||[];
+      $('#riskCards').innerHTML=rows.length?rows.map(r=>`<article class="entity-card"><div class="entity-top"><div><h3>${esc(r.bank||'Phone')} · ${esc(r.identifier_masked)}</h3><p>${esc(r.risk_level)} · last activity ${fmtDate(r.latest_activity_at)}</p></div><span class="pill ${riskClass(r.risk_score)}">${r.risk_score}/100</span></div><div class="entity-metrics"><div><b>${r.independent_reports}</b><span>Reports</span></div><div><b>${r.verified_reports}</b><span>Verified</span></div><div><b>${r.evidence_submissions}</b><span>Evidence</span></div></div><button class="btn" data-risk-reports="${esc(r.identifier)}">Open matching reports →</button></article>`).join(''):`<div class="empty" style="grid-column:1/-1"><b>No risk profiles found.</b><span>Profiles appear after incident reports are submitted.</span></div>`;
+      $$('[data-risk-reports]').forEach(b=>b.addEventListener('click',async()=>{$('#reportQ').value=b.dataset.riskReports;$('#reportStatus').value='all';await switchView('reports');}));
+    }
+    $('#riskFilterBtn').addEventListener('click',loadRisks); $('#riskQ').addEventListener('keydown',e=>{if(e.key==='Enter')loadRisks()});
+
+    async function loadReporters(){
+      const data=await api('reporters',{q:$('#reporterQ').value.trim()}); const rows=data.reporters||[];
+      $('#reporterCards').innerHTML=rows.length?rows.map(r=>`<article class="entity-card"><div class="entity-top"><div><h3>${esc(r.first_name)} ${esc(r.last_name)}</h3><p>${esc(r.phone)} · joined ${fmtDate(r.created_at)}</p></div><span class="pill evidence">${esc(r.status)}</span></div><div class="entity-metrics"><div><b>${r.report_count}</b><span>Reports</span></div><div><b>${r.verified_count}</b><span>Verified</span></div><div><b>${r.evidence_count}</b><span>Evidence</span></div></div><p style="margin-top:10px">Claimed losses: <b style="color:#dff7ec">${fmtMoney(r.claimed_value)}</b></p></article>`).join(''):`<div class="empty" style="grid-column:1/-1"><b>No reporters found.</b></div>`;
+    }
+    $('#reporterFilterBtn').addEventListener('click',loadReporters); $('#reporterQ').addEventListener('keydown',e=>{if(e.key==='Enter')loadReporters()});
+
+    async function loadSearches(){ const d=await api('searches',{limit:200}); $('#searchesBody').innerHTML=(d.searches||[]).map(s=>`<tr><td><div class="id-main">${esc(s.bank||'Phone')} · ${esc(s.identifier_masked)}</div></td><td>${esc(s.identity_type)}</td><td><span class="pill ${riskClass(s.risk_score_snapshot)}">${s.risk_score_snapshot}/100</span></td><td><span class="sub">${s.reporter_id?'Linked profile':'Guest search'}</span></td><td>${fmtDate(s.created_at)}</td></tr>`).join('')||'<tr><td colspan="5"><div class="empty"><b>No searches yet.</b></div></td></tr>'; }
+    async function loadAudit(){ const d=await api('audit'); $('#auditBody').innerHTML=(d.audit||[]).map(a=>`<tr><td><div class="id-main">${esc(a.action.replaceAll('_',' '))}</div></td><td>${esc(a.entity_type)}<div class="sub mono">${esc(a.entity_id||'')}</div></td><td><span class="sub mono">${esc(String(a.admin_id).slice(0,8))}…</span></td><td>${esc(a.note||'—')}</td><td>${fmtDate(a.created_at)}</td></tr>`).join('')||'<tr><td colspan="5"><div class="empty"><b>No audit events yet.</b></div></td></tr>'; }
+    async function loadTeam(){ const d=await api('admins'); $('#teamCards').innerHTML=(d.admins||[]).map(a=>`<article class="entity-card"><div class="entity-top"><div><h3>${esc(a.full_name||a.email)}</h3><p>${esc(a.email)} · ${esc(a.role)}</p></div><span class="pill ${a.active?'verified':'rejected'}">${a.active?'Active':'Disabled'}</span></div><div class="entity-metrics"><div style="grid-column:span 3"><b style="font-size:10px">${fmtDate(a.last_seen_at)}</b><span>Last seen</span></div></div>${a.user_id!==currentAdmin.user_id?`<button class="btn" data-toggle-admin="${esc(a.user_id)}" data-active="${a.active?'0':'1'}">${a.active?'Deactivate access':'Reactivate access'}</button>`:''}</article>`).join(''); $$('[data-toggle-admin]').forEach(b=>b.addEventListener('click',async()=>{try{await api('toggle_admin',{user_id:b.dataset.toggleAdmin,active:b.dataset.active==='1'});toast('Administrator access updated.');loadTeam();}catch(e){toast(e.message,true)}})); }
+
+    $('#generateInviteBtn').addEventListener('click',async()=>{const btn=$('#generateInviteBtn');setBusy(btn,true);try{const d=await api('create_invite',{role:$('#inviteRole').value});const box=$('#generatedInvite');box.classList.remove('hidden');box.innerHTML=`<small>ONE-TIME ${esc(d.role.toUpperCase())} INVITE</small><code id="inviteOut">${esc(d.invite)}</code><small>Expires ${fmtDate(d.expires_at)}. It is shown only now.</small><div class="copy-row" style="margin-top:9px"><button class="btn soft" id="copyInvite">Copy invite</button></div>`;$('#copyInvite').onclick=async()=>{await navigator.clipboard.writeText(d.invite);toast('Invite copied.');};}catch(e){toast(e.message,true)}finally{setBusy(btn,false)}});
+    $('#createInviteBtn').addEventListener('click',()=>$('#generateInviteBtn').scrollIntoView({behavior:'smooth',block:'center'}));
+
+    function bindReportOpeners(){ $$('[data-open-report]').forEach(b=>{b.onclick=()=>openReport(b.dataset.openReport)}); }
+    async function openReport(id){
+      try{const d=await api('report_detail',{id});currentReport=d;const r=d.report,rep=d.reporter,risk=d.risk||{risk_score:0,risk_level:'No significant reports',independent_reports:0,evidence_submissions:0,verified_reports:0,open_disputes:0,resolved_incidents:0};$('#dTitle').textContent=(r.bank||'Phone')+' · '+r.identifier;$('#incidentDetails').innerHTML=`<div class="detail-row"><span>Full identifier</span><b class="mono">${esc(r.identifier)}</b></div><div class="detail-row"><span>Type / bank</span><b>${esc(r.identity_type)}${r.bank?' · '+esc(r.bank):''}</b></div><div class="detail-row"><span>Transaction type</span><b>${esc(r.transaction_type||'Other')}</b></div><div class="detail-row"><span>Claimed loss</span><b>${fmtMoney(r.amount_lost)}</b></div><div class="detail-row"><span>Submitted</span><b>${fmtDate(r.created_at)}</b></div><div class="detail-row"><span>Status</span><b>${statusLabel(r.status)}</b></div><div class="detail-row"><span>Evidence</span><b>${r.has_evidence?esc(r.evidence_name||'Attached'):'None'}</b></div>`;$('#incidentStory').textContent=r.story||'—';$('#reporterDetails').innerHTML=rep?`<div class="detail-row"><span>Name</span><b>${esc(rep.first_name)} ${esc(rep.last_name)}</b></div><div class="detail-row"><span>Phone</span><b>${esc(rep.phone)}</b></div><div class="detail-row"><span>Profile status</span><b>${esc(rep.status)}</b></div><div class="detail-row"><span>Joined</span><b>${fmtDate(rep.created_at)}</b></div>`:`<div class="sub">Reporter profile unavailable.</div>`;$('#riskHero').innerHTML=`<div class="risk-hero"><div class="risk-ring" style="--score:${Number(risk.risk_score||0)}"><b>${Number(risk.risk_score||0)}</b></div><div><h3>${esc(risk.risk_level||'No significant reports')}</h3><p>${esc(risk.warning_summary||'Risk will be recalculated when this review is saved.')}</p></div></div>`;$('#riskMetrics').innerHTML=`<div class="detail-row"><span>Total reports</span><b>${risk.independent_reports||0}</b></div><div class="detail-row"><span>Evidence-backed reports</span><b>${risk.evidence_submissions||0}</b></div><div class="detail-row"><span>Verified incidents</span><b>${risk.verified_reports||0}</b></div><div class="detail-row"><span>Open disputes</span><b>${risk.open_disputes||0}</b></div><div class="detail-row"><span>Resolved</span><b>${risk.resolved_incidents||0}</b></div>`;$('#adminNote').value=r.admin_note||'';$('#resolutionNote').value=r.resolution_note||'';$('#resolutionAmount').value=r.resolution_amount??'';$('#reviewStatus').value=r.status;$('#evidenceStatus').value=r.evidence_status||'unreviewed';$('#loadEvidenceBtn').classList.toggle('hidden',!r.has_evidence);$('#evidencePreview').innerHTML='<div><b>No evidence loaded.</b><span>Signed evidence links expire after 10 minutes.</span></div>';$('#drawerAudit').innerHTML=(d.audit||[]).length?(d.audit||[]).map(a=>`<div class="audit-item"><div class="audit-dot"></div><div><b>${esc(a.action.replaceAll('_',' '))}</b><span>${esc(a.note||'Review updated')} · ${fmtDate(a.created_at)}</span></div></div>`).join(''):'<div class="sub">No prior admin review.</div>';$('#reportOverlay').classList.add('show');}
+      catch(e){toast(e.message,true)}
+    }
+    function closeDrawer(){$('#reportOverlay').classList.remove('show');currentReport=null} $('#closeDrawer').onclick=closeDrawer;$('#cancelReview').onclick=closeDrawer;$('#reportOverlay').addEventListener('click',e=>{if(e.target===$('#reportOverlay'))closeDrawer()});
+    $$('[data-set-status]').forEach(b=>b.addEventListener('click',()=>{$('#reviewStatus').value=b.dataset.setStatus}));
+    $('#resolutionAmount').addEventListener('input',e=>e.target.value=e.target.value.replace(/\D/g,'').slice(0,15));
+
+    $('#loadEvidenceBtn').addEventListener('click',async()=>{if(!currentReport)return;const box=$('#evidencePreview'),btn=$('#loadEvidenceBtn');setBusy(btn,true);try{const d=await api('evidence_url',{id:currentReport.report.id});if(String(d.mime||'').startsWith('image/'))box.innerHTML=`<img src="${esc(d.url)}" alt="Evidence preview" />`;else if(d.mime==='application/pdf')box.innerHTML=`<iframe src="${esc(d.url)}#toolbar=1" title="Evidence PDF"></iframe>`;else box.innerHTML=`<div><b>${esc(d.name||'Evidence')}</b><span><a href="${esc(d.url)}" target="_blank" rel="noopener">Open signed evidence</a></span></div>`;toast('Private evidence link created for 10 minutes.');}catch(e){toast(e.message,true)}finally{setBusy(btn,false)}});
+
+    $('#saveReview').addEventListener('click',async()=>{if(!currentReport)return;const btn=$('#saveReview');setBusy(btn,true);try{const d=await api('review_report',{id:currentReport.report.id,status:$('#reviewStatus').value,evidence_status:$('#evidenceStatus').value,admin_note:$('#adminNote').value,resolution_note:$('#resolutionNote').value,resolution_amount:$('#resolutionAmount').value});toast(`Review saved. Risk score is now ${d.risk.risk_score}/100.`);closeDrawer();await loadView(currentView,true);if(currentView!=='overview')loadOverview();}catch(e){toast(e.message,true)}finally{setBusy(btn,false)}});
+
+    // initial session
+    const {data:{session}}=await supabase.auth.getSession(); if(session) enterApp();
+  </script>
+</body>
+</html>
